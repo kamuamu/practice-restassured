@@ -14,6 +14,11 @@ Feature: User Management API
     | age       | 29             |
     Then the response status code should be 201
 
+   Scenario: Update a existing user successfully
+     Given I have the base API URL
+     When I have update the user with "kamu@gmail.com"
+     Then the response status code should be 200
+
   Scenario: Delete the user successfully
     Given I have the base API URL
     When I delete the user with id.

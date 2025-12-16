@@ -12,6 +12,7 @@ import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -88,5 +89,21 @@ public class UserManagementTest {
             response.then().log().all();
         }
 
+    }
+
+    @When("I have update the user with {string}")
+    public void iHaveUpdateTheUserWith(String email){
+        Map<String,String> map = new HashMap<>();
+        map.put("email", email);
+        response = given()
+                .header("apikey", API_KEY)
+                .header("Authorization", "Bearer "+ API_KEY)
+                .header("Prefer", "return=representation")
+                .contentType("application/json")
+                .queryParam("id", "eq." +id)
+                .body(map)
+                .when()
+                .patch("/users");
+        response.then().log().all();
     }
 }
