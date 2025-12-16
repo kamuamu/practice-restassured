@@ -3,6 +3,7 @@ package com.api.test.stepdefs;
 import com.api.test.modals.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,10 +13,12 @@ import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
 import io.restassured.response.Response;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 public class UserManagementTest {
     private Response response;
@@ -105,5 +108,13 @@ public class UserManagementTest {
                 .when()
                 .patch("/users");
         response.then().log().all();
+    }
+
+    @And("the response should be {string}")
+    public void theResponseShouldBe(String schemafile) {
+        response.then()
+                .assertThat()
+                .body(matchesJsonSchemaInClasspath("schemas/"+ schemafile));
+        System.out.println("Json schema successfull..");
     }
 }
